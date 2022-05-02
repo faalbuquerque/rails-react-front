@@ -1,23 +1,30 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import Users from './components/Users';
+
+const URL = 'http://127.0.0.1:3000/users'
+
+const getApiData = () =>{
+  return fetch(URL, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json'
+    }
+  }).then(response => response.json())
+}
 
 function App() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(()=>{
+    getApiData().then((data)=>{
+      setUsers(data);
+    })
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      < Users usersList={ users } />
     </div>
   );
 }
